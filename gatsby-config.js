@@ -17,16 +17,16 @@ module.exports = {
   plugins: [
     `gatsby-plugin-typescript`,
     `gatsby-plugin-styled-components`,
-    {
-      resolve: "gatsby-source-graphql",
-      options: {
-        // Url to query from
-        url: process.env.GATSBY_METAPHYSICS_URL,
-        // This type will contain remote schema Query type
-        typeName: "ARTSY",
-        // This is field under which it's accessible
-        fieldName: "metaphysics",
-      },
-    },
+    // {
+    //   resolve: "gatsby-source-graphql",
+    //   options: {
+    //     // Url to query from
+    //     url: process.env.GATSBY_METAPHYSICS_URL,
+    //     // This type will contain remote schema Query type
+    //     typeName: "ARTSY",
+    //     // This is field under which it's accessible
+    //     fieldName: "metaphysics",
+    //   },
+    // },
   ],
 }

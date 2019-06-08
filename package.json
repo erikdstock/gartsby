@@ -11,7 +11,7 @@
     "debug": "nodemon --exec \"node --inspect-brk --no-lazy node_modules/.bin/gatsby develop\"",
     "lint": "eslint . --ext ts --ext tsx",
     "prettier-write": "prettier --write \"src/**/*.js\"",
-    "start": "yarn develop",
+    "start": "yarn develop -p 5000",
     "test": "echo \"Write tests! -> https://gatsby.app/unit-testing\"",
     "type-check": "tsc --pretty --noEmit"
   },
