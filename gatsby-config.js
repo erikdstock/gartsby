@@ -5,6 +5,11 @@
  */
 
 module.exports = {
+  siteMetadata: {
+    title: `Gartsby`,
+    description: `[G] [A.] [T] [S] [B] [Y]`,
+    author: `@erikdstock`,
+  },
   /* Your site config here */
   plugins: [`gatsby-plugin-typescript`, `gatsby-plugin-styled-components`],
 }
