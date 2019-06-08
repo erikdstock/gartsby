@@ -1,5 +1,8 @@
 .DS_Store
-.env
+
+.env.development
+.env.production
+
 .yarn-integrity
 yarn-debug.log
 yarn-error.log
