@@ -1,17 +1,27 @@
 import React, { useState } from "react"
 import { Router, RouteComponentProps } from "@reach/router"
-import { login, getUser } from "../utils/auth"
+import { Flex, Sans, Box } from "@artsy/palette"
 
-import Layout from "../components/layout"
-import { fetchMe } from "utils/gravity"
+import Layout from "components/layout"
 import { NavLink } from "components/NavLink"
-import { Flex, Sans } from "@artsy/palette"
+import { login, getUser } from "utils/auth"
+import * as gravity from "utils/gravity"
+import { BidsPage } from "components/account/BidsPage"
 
-type RouteComponent = React.FunctionComponent<RouteComponentProps>
+export type RouteComponent = React.FunctionComponent<RouteComponentProps>
+
+const DEBUG = false
+
+export const DebugData = ({ debug = false, data }) =>
+  debug &&
+  data && (
+    <Box p={2} bg="black10" width="500px">
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+    </Box>
+  )
 
 const Home: RouteComponent = () => <h3>Account Home</h3>
 const Settings: RouteComponent = () => <h3>Settings</h3>
-const Bids: RouteComponent = () => <h3>Bids</h3>
 
 interface Me {
   name: string
@@ -25,7 +35,7 @@ const AccountPage = () => {
     return <p>Redirecting to login...</p>
   } else {
     if (!me) {
-      fetchMe().then(data => setMe(data))
+      gravity.me().then(data => setMe(data))
       return <p>Fetching user data...</p>
     }
     return (
@@ -45,9 +55,10 @@ const AccountPage = () => {
               My Favorites
             </NavLink>
           </Flex>
+          <DebugData debug={DEBUG} data={me} />
           <Router>
             <Settings path="/account/settings" />
-            <Bids path="/account/bids" />
+            <BidsPage path="/account/bids" />
             <Home default />
           </Router>
         </Layout>
