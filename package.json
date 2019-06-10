@@ -11,7 +11,7 @@
     "debug": "nodemon --exec \"node --inspect-brk --no-lazy node_modules/.bin/gatsby develop\"",
     "lint": "eslint . --ext ts --ext tsx",
     "prettier-write": "prettier --write \"src/**/*.js\"",
-    "start": "yarn develop",
+    "start": "yarn develop -p 5000",
     "test": "echo \"Write tests! -> https://gatsby.app/unit-testing\"",
     "type-check": "tsc --pretty --noEmit"
   },
@@ -20,6 +20,7 @@
     "gatsby": "^2.8.4",
     "gatsby-plugin-styled-components": "^3.0.7",
     "gatsby-plugin-typescript": "^2.0.15",
+    "gatsby-source-graphql": "^2.0.18",
     "jwt-decode": "^2.2.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
