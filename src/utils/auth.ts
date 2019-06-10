@@ -1,8 +1,6 @@
 import { browserOnly } from "utils/environment"
 import { navigate } from "gatsby"
-interface User {
-  jwt: string
-}
+import { AnonymousUser, User } from "components/App/UserContext"
 
 export const logout = () =>
   browserOnly(() => {
@@ -24,7 +22,7 @@ const getQueryVariable: (key: string) => string | null = (key: string) => {
   return tokenPair ? tokenPair[1] : null
 }
 
-export const isAuthenticated = () => !!getUser()
+// export const isAuthenticated = () => !!getUser()
 
 // Find jwt in the browser address bar, set it as the profile and navigate onwards.
 export const handleCallback = cb =>
@@ -39,13 +37,15 @@ export const handleCallback = cb =>
     }
   })
 
-export function getUser(): User | null {
-  return browserOnly<User>(() =>
-    window.localStorage.getItem("gatsbyUser")
-      ? JSON.parse(window.localStorage.getItem("gatsbyUser") as string)
-      : null
-  )
-}
+// export function getUser(): User {
+//   return browserOnly<User>(() =>
+//     window.localStorage.getItem("gatsbyUser")
+//       ? (JSON.parse(window.localStorage.getItem(
+//           "gatsbyUser"
+//         ) as string) as User)
+//       : AnonymousUser
+//   )
+// }
 
 function setUser(u: User): void {
   browserOnly(() => {

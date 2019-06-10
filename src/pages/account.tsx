@@ -3,10 +3,11 @@ import { Router, RouteComponentProps } from "@reach/router"
 import { Flex, Sans, Box } from "@artsy/palette"
 
 import Layout from "components/layout"
+import { PrivateRoute } from "components/PrivateRoute"
 import { NavLink } from "components/NavLink"
-import { login, getUser } from "utils/auth"
-import * as gravity from "utils/gravity"
+import { login } from "utils/auth"
 import { BidsPage } from "components/account/BidsPage"
+import { UserContext } from "components/App/UserContext"
 
 export type RouteComponent = React.FunctionComponent<RouteComponentProps>
 
@@ -28,43 +29,54 @@ interface Me {
 }
 
 const AccountPage = () => {
-  const user = getUser()
-  const [me, setMe] = useState<Me | null>(null)
-  if (!user) {
-    login()
-    return <p>Redirecting to login...</p>
-  } else {
-    if (!me) {
-      gravity.me().then(data => setMe(data))
-      return <p>Fetching user data...</p>
-    }
-    return (
-      <>
-        <Layout>
-          <Flex justifyContent="flex-end">
-            <Sans style={{ flexGrow: "1" }} color="purple100" size="6">
-              Hello, {me.name.split(" ")[0]}!
-            </Sans>
-            <NavLink size="5" to="/account">
-              Account
-            </NavLink>
-            <NavLink size="5" to="/account/bids">
-              My Bids
-            </NavLink>
-            <NavLink size="5" to="/account/favorites">
-              My Favorites
-            </NavLink>
-          </Flex>
-          <DebugData debug={DEBUG} data={me} />
-          <Router>
-            <Settings path="/account/settings" />
-            <BidsPage path="/account/bids" />
-            <Home default />
-          </Router>
-        </Layout>
-      </>
-    )
-  }
+  // const user = getUser()
+  // const [me, setMe] = useState<Me | null>(null)
+  // if (!user) {
+  //   login()
+  //   return <p>Redirecting to login...</p>
+  // } else {
+  //   if (!me) {
+  //     gravity.me().then(data => setMe(data))
+  //     return <p>Fetching user data...</p>
+  //   }
+  return (
+    <Layout>
+      <UserContext.Consumer>
+        {({ user }) => {
+          if (!user.jwt) {
+            login() // TODO: update
+            return
+          } else {
+            return (
+              <>
+                <Flex justifyContent="flex-end">
+                  <Sans style={{ flexGrow: "1" }} color="purple100" size="6">
+                    Hello, {user.jwt.slice(0, 8)}!
+                  </Sans>
+                  <NavLink size="5" to="/account">
+                    Account
+                  </NavLink>
+                  <NavLink size="5" to="/account/bids">
+                    My Bids
+                  </NavLink>
+                  <NavLink size="5" to="/account/favorites">
+                    My Favorites
+                  </NavLink>
+                </Flex>
+                <DebugData debug={DEBUG} data={user} />
+                <Router>
+                  <PrivateRoute component={Settings} path="/account/settings" />
+                  <PrivateRoute component={BidsPage} path="/account/bids" />
+                  <PrivateRoute component={Home} default />
+                </Router>
+              </>
+            )
+          }
+        }}
+      </UserContext.Consumer>
+    </Layout>
+  )
+  // }
 }
 
 export default AccountPage

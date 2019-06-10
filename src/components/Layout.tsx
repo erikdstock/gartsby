@@ -1,15 +1,23 @@
 import React from "react"
-import { Box, Sans, Flex, Button, Separator, color } from "@artsy/palette"
-import { StaticQuery, graphql, Link } from "gatsby"
-import { isAuthenticated, logout, login } from "../utils/auth"
+import { Button, Flex, color, Sans, Separator, Box } from "@artsy/palette"
+import { login } from "../utils/auth"
 import { NavLink } from "components/NavLink"
+import { UserContext } from "./App/UserContext"
+import { StaticQuery, graphql, Link } from "gatsby"
 
-const AuthButton = () =>
-  isAuthenticated() ? (
-    <Button onClick={logout}>Log Out</Button>
-  ) : (
-    <Button onClick={() => login("/")}>Log In</Button>
+const AuthButton = () => {
+  return (
+    <UserContext.Consumer>
+      {({ user, logout }) =>
+        user.jwt ? (
+          <Button onClick={logout}>Log Out</Button>
+        ) : (
+          <Button onClick={() => login("/")}>Log In</Button>
+        )
+      }
+    </UserContext.Consumer>
   )
+}
 
 export default ({ children }) => (
   <StaticQuery

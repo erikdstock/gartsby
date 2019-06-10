@@ -1,4 +1,4 @@
 import React from "react"
-import { Theme } from "@artsy/palette"
+import { App } from "components/App"
 
-export const wrapRootElement = ({ element }) => <Theme>{element}</Theme>
+export const wrapRootElement = ({ element }) => <App>{element}</App>
