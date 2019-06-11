@@ -1,21 +1,16 @@
-import React from "react"
+import React, { useContext } from "react"
 import { Button, Flex, color, Sans, Separator, Box } from "@artsy/palette"
-import { login } from "../utils/auth"
+import { redirectToLogin } from "../utils/auth"
 import { NavLink } from "components/NavLink"
 import { UserContext } from "./App/UserContext"
 import { StaticQuery, graphql, Link } from "gatsby"
 
 const AuthButton = () => {
-  return (
-    <UserContext.Consumer>
-      {({ user, logout }) =>
-        user.jwt ? (
-          <Button onClick={logout}>Log Out</Button>
-        ) : (
-          <Button onClick={() => login("/")}>Log In</Button>
-        )
-      }
-    </UserContext.Consumer>
+  const { user, logout } = useContext(UserContext)
+  return user.jwt ? (
+    <Button onClick={() => logout()}>Log Out</Button>
+  ) : (
+    <Button onClick={() => redirectToLogin("/")}>Log In</Button>
   )
 }
 

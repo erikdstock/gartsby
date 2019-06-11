@@ -1,14 +1,12 @@
 import { browserOnly } from "utils/environment"
-import { navigate } from "gatsby"
-import { AnonymousUser, User } from "components/App/UserContext"
 
-export const logout = () =>
-  browserOnly(() => {
-    window.localStorage.removeItem("gatsbyUser")
-    navigate("/")
-  })
+import { User, LoggedInUser } from "components/App/UserContext"
 
-export const login = (redirectPath = "/") =>
+export function isLoggedIn(u: User): u is LoggedInUser {
+  return typeof u.jwt === "string"
+}
+
+export const redirectToLogin = (redirectPath = "/") =>
   browserOnly(() => {
     window.location.href = loginUrl(redirectPath)
   })
@@ -22,36 +20,20 @@ const getQueryVariable: (key: string) => string | null = (key: string) => {
   return tokenPair ? tokenPair[1] : null
 }
 
-// export const isAuthenticated = () => !!getUser()
-
 // Find jwt in the browser address bar, set it as the profile and navigate onwards.
-export const handleCallback = cb =>
+export const handleCallback = (setUser, cb) =>
   browserOnly(() => {
     const jwt = getQueryVariable("code")
     if (jwt) {
+      console.log("got jwt")
       setUser({ jwt })
       const redirectTo = getQueryVariable("redirectTo")
+      console.log("got redirect:", redirectTo)
       cb(redirectTo || "/")
     } else {
       cb("/")
     }
   })
-
-// export function getUser(): User {
-//   return browserOnly<User>(() =>
-//     window.localStorage.getItem("gatsbyUser")
-//       ? (JSON.parse(window.localStorage.getItem(
-//           "gatsbyUser"
-//         ) as string) as User)
-//       : AnonymousUser
-//   )
-// }
-
-function setUser(u: User): void {
-  browserOnly(() => {
-    window.localStorage.setItem("gatsbyUser", JSON.stringify(u))
-  })
-}
 
 const urlSafeCallbackPath = (redirectPath = "/account") =>
   encodeURIComponent(

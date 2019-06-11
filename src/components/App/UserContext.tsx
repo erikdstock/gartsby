@@ -1,8 +1,14 @@
 import React from "react"
 
-export interface User {
-  jwt: string | null
+export interface LoggedInUser {
+  jwt: string
 }
+
+interface LoggedOutUser {
+  jwt: null
+}
+
+export type User = LoggedInUser | LoggedOutUser
 
 interface UserContext {
   user: User
@@ -10,9 +16,13 @@ interface UserContext {
   logout: () => void
 }
 
-export const AnonymousUser: User = {
+export const AnonymousUser: LoggedOutUser = {
   jwt: null,
 }
+
+// function isAnonymousUser(u: User): u is AnonymousUser {
+//   return (<Fish>pet).swim !== undefined
+// }
 
 export const UserContext = React.createContext<UserContext>({
   user: AnonymousUser,

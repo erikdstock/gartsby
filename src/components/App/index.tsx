@@ -7,7 +7,6 @@ export class App extends React.Component<any, { user: User }> {
   state = { user: AnonymousUser }
 
   componentDidMount() {
-    console.log("CDM")
     if (isBrowser()) {
       const user: User = window.localStorage.getItem("gatsbyUser")
         ? JSON.parse(window.localStorage.getItem("gatsbyUser") as string)
