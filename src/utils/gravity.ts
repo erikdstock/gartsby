@@ -1,9 +1,7 @@
-import { User } from "components/App/UserContext"
-
-// import { getUser } from "./auth"
+import { User } from "components/AuthenticationProvider"
 
 const apiUrl = `${process.env.GATSBY_API_URL}/api/v1`
-// const requestHeaders = (jwt = '')
+
 export const me = async (user: User) => {
   if (user && "jwt" in user) {
     const { jwt } = user

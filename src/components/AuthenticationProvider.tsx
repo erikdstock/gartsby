@@ -1,12 +1,14 @@
 import React from "react"
-import { Theme } from "@artsy/palette"
-import { UserContext, AnonymousUser, User } from "components/App/UserContext"
 import { isBrowser } from "utils/environment"
+import { navigate } from "gatsby"
 
-export class App extends React.Component<any, { user: User }> {
+export class AuthenticationProvider extends React.Component<
+  any,
+  { user: User }
+> {
   state = { user: AnonymousUser }
 
-  componentDidMount() {
+  componentWillMount() {
     if (isBrowser()) {
       const user: User = window.localStorage.getItem("gatsbyUser")
         ? JSON.parse(window.localStorage.getItem("gatsbyUser") as string)
@@ -22,10 +24,10 @@ export class App extends React.Component<any, { user: User }> {
 
   logout = () => {
     this.setUser(AnonymousUser)
+    navigate("/")
   }
 
   render() {
-    console.log(this.props)
     return (
       <UserContext.Provider
         value={{
@@ -34,8 +36,34 @@ export class App extends React.Component<any, { user: User }> {
           logout: this.logout,
         }}
       >
-        <Theme>{this.props.children}</Theme>
+        {this.props.children}
       </UserContext.Provider>
     )
   }
 }
+
+export interface LoggedInUser {
+  jwt: string
+}
+
+interface LoggedOutUser {
+  jwt: null
+}
+
+export type User = LoggedInUser | LoggedOutUser
+
+interface UserContext {
+  user: User
+  setUser: (u: User) => void
+  logout: () => void
+}
+
+export const AnonymousUser: LoggedOutUser = {
+  jwt: null,
+}
+
+export const UserContext = React.createContext<UserContext>({
+  user: AnonymousUser,
+  setUser: _u => {},
+  logout: () => {},
+})

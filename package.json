@@ -8,7 +8,7 @@
     "build": "gatsby build",
     "clean": "rm -rf .cache && yarn start",
     "develop": "nodemon --exec \"gatsby develop\"",
-    "debug": "nodemon --exec \"node --inspect-brk --no-lazy node_modules/.bin/gatsby develop\"",
+    "debug": "nodemon --exec \"node --inspect-brk --no-lazy node_modules/.bin/gatsby develop -p 5000\"",
     "lint": "eslint . --ext ts --ext tsx",
     "prettier-write": "prettier --write \"src/**/*.js\"",
     "start": "yarn develop -p 5000",

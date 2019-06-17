@@ -1,10 +1,17 @@
 import React, { useContext } from "react"
-import { navigate } from "gatsby"
 import { RouteComponentProps } from "@reach/router"
-import { UserContext, User } from "components/App/UserContext"
+import { UserContext, LoggedInUser } from "components/AuthenticationProvider"
+import { isLoggedIn, redirectToLogin } from "utils/auth"
 
-interface PrivateRouteProps extends RouteComponentProps {
-  component: React.ComponentType
+export type AuthenticatedRouteComponent = React.ComponentType<
+  AuthenticatedProps
+>
+
+export interface AuthenticatedProps {
+  user: LoggedInUser
+}
+export interface PrivateRouteProps extends RouteComponentProps {
+  component: AuthenticatedRouteComponent
 }
 
 export const PrivateRoute: React.FC<PrivateRouteProps> = ({
@@ -13,12 +20,11 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({
   ...rest
 }) => {
   const { user } = useContext(UserContext)
-  if (!user.jwt) {
-    location
-      ? navigate(`/login?redirectTo=${location.pathname}`)
-      : navigate(`/login`)
+  if (!isLoggedIn(user)) {
+    redirectToLogin(location ? location.pathname : "/")
+
     return null
   } else {
-    return <Component {...rest} />
+    return <Component user={user} {...rest} />
   }
 }

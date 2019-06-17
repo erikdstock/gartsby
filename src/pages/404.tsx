@@ -1,9 +1,10 @@
 import React from "react"
 
-import Layout from "../components/layout"
+import Layout from "../components/Layout"
 // import SEO from "../components/seo"
 // <SEO title="404: Not found" />
 
+// TODO: set up React Helmet/SEO
 const NotFoundPage = () => (
   <Layout>
     <h1>NOT FOUND</h1>
