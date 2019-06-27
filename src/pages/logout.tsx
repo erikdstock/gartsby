@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react"
 import { navigate } from "gatsby"
 import { UserContext } from "components/AuthenticationProvider"
 
-const Callback = () => {
+const Logout = () => {
   const { logout } = useContext(UserContext)
 
   useEffect(() => {
@@ -13,4 +13,4 @@ const Callback = () => {
   return <p>Bye Bye</p>
 }
 
-export default Callback
+export default Logout
