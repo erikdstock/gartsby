@@ -1,14 +1,15 @@
-import React, { useState } from "react"
-import { Router, RouteComponentProps } from "@reach/router"
-import { Flex, Sans, Box } from "@artsy/palette"
+import React, { useContext } from "react"
+import { Router } from "@reach/router"
+import { Box, Sans } from "@artsy/palette"
 
-import Layout from "components/layout"
-import { NavLink } from "components/NavLink"
-import { login, getUser } from "utils/auth"
-import * as gravity from "utils/gravity"
-import { BidsPage } from "components/account/BidsPage"
-
-export type RouteComponent = React.FunctionComponent<RouteComponentProps>
+import Layout from "components/Layout"
+import {
+  PrivateRoute,
+  AuthenticatedRouteComponent,
+} from "components/PrivateRoute"
+import { FavoritesPage } from "components/account/FavoritesPage"
+import { UserContext } from "components/AuthenticationProvider"
+import { AccountNav } from "components/account/AccountNav"
 
 const DEBUG = false
 
@@ -20,51 +21,23 @@ export const DebugData = ({ debug = false, data }) =>
     </Box>
   )
 
-const Home: RouteComponent = () => <h3>Account Home</h3>
-const Settings: RouteComponent = () => <h3>Settings</h3>
-
-interface Me {
-  name: string
-}
+const Home: AuthenticatedRouteComponent = () => (
+  <Sans size="5t">Account Home</Sans>
+)
 
 const AccountPage = () => {
-  const user = getUser()
-  const [me, setMe] = useState<Me | null>(null)
-  if (!user) {
-    login()
-    return <p>Redirecting to login...</p>
-  } else {
-    if (!me) {
-      gravity.me().then(data => setMe(data))
-      return <p>Fetching user data...</p>
-    }
-    return (
-      <>
-        <Layout>
-          <Flex justifyContent="flex-end">
-            <Sans style={{ flexGrow: "1" }} color="purple100" size="6">
-              Hello, {me.name.split(" ")[0]}!
-            </Sans>
-            <NavLink size="5" to="/account">
-              Account
-            </NavLink>
-            <NavLink size="5" to="/account/bids">
-              My Bids
-            </NavLink>
-            <NavLink size="5" to="/account/favorites">
-              My Favorites
-            </NavLink>
-          </Flex>
-          <DebugData debug={DEBUG} data={me} />
-          <Router>
-            <Settings path="/account/settings" />
-            <BidsPage path="/account/bids" />
-            <Home default />
-          </Router>
-        </Layout>
-      </>
-    )
-  }
+  const { user } = useContext(UserContext)
+  return (
+    <Layout>
+      <Router>
+        <PrivateRoute component={AccountNav} path="/account">
+          <PrivateRoute component={FavoritesPage} path="favorites" />
+          <PrivateRoute component={Home} default />
+        </PrivateRoute>
+      </Router>
+      <DebugData debug={DEBUG} data={user} />
+    </Layout>
+  )
 }
 
 export default AccountPage

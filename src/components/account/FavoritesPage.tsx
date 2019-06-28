@@ -1,20 +1,18 @@
 import React, { useState } from "react"
 
-import * as gravity from "utils/gravity"
 import { Sans, Box, Serif, Separator, BorderBox, Flex } from "@artsy/palette"
-import { RouteComponent, DebugData } from "pages/account"
-
-const DEBUG = true
+import { AuthenticatedRouteComponent } from "components/PrivateRoute"
 
 const last4 = (s: string) => {
   const length = s.length
   return s.slice(length - 5, length)
 }
 
-export const BidsPage: RouteComponent = () => {
-  const [bids, setBids] = useState<any[] | null>(null)
+// TODO: Convert this bids page to a favorites page
+export const FavoritesPage: AuthenticatedRouteComponent = () => {
+  const [bids] = useState<any[] | null>(null)
   if (!bids) {
-    gravity.meBidderPositions().then(data => setBids(data))
+    // gravity.meBidderPositions().then(data => setBids(data))
     return <pre>fetching ...</pre>
   } else {
     const activeBids = bids.filter(b => b.active)
@@ -49,7 +47,6 @@ export const BidsPage: RouteComponent = () => {
         <Separator />
 
         <Sans size="2">* Currencies may vary across bids</Sans>
-        <DebugData debug={DEBUG} data={bids} />
       </>
     )
   }
