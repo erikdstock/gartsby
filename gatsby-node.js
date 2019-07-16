@@ -2,6 +2,28 @@ const { introspectionQuery, graphql, printSchema } = require("gatsby/graphql")
 const write = require("write")
 const path = require("path")
 
+exports.createPages = async ({ actions: { createPage }, graphql }) => {
+  const result = await graphql(`
+    query GetSalesQuery {
+      metaphysics {
+        sales(is_auction: true, live: true, sort: CREATED_AT_ASC, size: 100) {
+          live_start_at
+          gravityID
+          id
+          name
+          is_live_open
+          end_at
+          is_closed
+          cover_image {
+            url
+          }
+        }
+      }
+    }
+  `).then(res => res.data)
+  console.log("got some sales: ", JSON.stringify(result, null, 2))
+}
+
 // Implement the Gatsby API “onCreatePage”. This is
 // called after every page is created.
 exports.onCreatePage = async ({ page, actions }) => {

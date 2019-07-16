@@ -10,6 +10,7 @@ import {
 import { FavoritesPage } from "components/account/FavoritesPage"
 import { UserContext } from "components/AuthenticationProvider"
 import { AccountNav } from "components/account/AccountNav"
+import { AccountHome } from "components/account/AccountHome"
 
 const DEBUG = false
 
@@ -21,10 +22,6 @@ export const DebugData = ({ debug = false, data }) =>
     </Box>
   )
 
-const Home: AuthenticatedRouteComponent = () => (
-  <Sans size="5t">Account Home</Sans>
-)
-
 const AccountPage = () => {
   const { user } = useContext(UserContext)
   return (
@@ -32,7 +29,7 @@ const AccountPage = () => {
       <Router>
         <PrivateRoute component={AccountNav} path="/account">
           <PrivateRoute component={FavoritesPage} path="favorites" />
-          <PrivateRoute component={Home} default />
+          <PrivateRoute component={AccountHome} default />
         </PrivateRoute>
       </Router>
       <DebugData debug={DEBUG} data={user} />
